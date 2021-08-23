@@ -1,10 +1,10 @@
 package shardkv
 
 // import "../shardmaster"
-import "../labrpc"
-import "../raft"
+import "mit6.824/labrpc"
+import "mit6.824/raft"
 import "sync"
-import "../labgob"
+import "mit6.824/labgob"
 
 type Op struct {
 	// Your definitions here.
@@ -90,7 +90,7 @@ func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister,
 	// kv.mck = shardmaster.MakeClerk(kv.masters)
 
 	kv.applyCh = make(chan raft.ApplyMsg)
-	kv.rf = raft.Make(servers, me, persister, kv.applyCh)
+	kv.rf = raft.Make(servers, me, persister, kv.applyCh, maxraftstate)
 
 	return kv
 }

@@ -19,13 +19,15 @@ package raft
 
 import (
 	"fmt"
-	"github.com/sirupsen/logrus"
-	"github.com/zh1014/algorithm/queue"
 	"math/rand"
-	"mit6.824/labrpc"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"mit6.824/labrpc"
+
+	"github.com/howz97/algorithm/queue"
+	"github.com/sirupsen/logrus"
 )
 
 // import "bytes"
