@@ -13,6 +13,7 @@ import (
 	"time"
 )
 
+// todo: object pool
 type Op struct {
 	ClientID int
 	SerialNo int
