@@ -297,7 +297,7 @@ func (rf *Raft) startLogReplication() {
 // for any long-running work.
 func Make(peers []*labrpc.ClientEnd, me int,
 	persister *Persister, applyCh chan ApplyMsg, maxSize int) *Raft {
-	// init data-structure
+	// initialize data-structure
 	rf := &Raft{
 		peers:       peers,
 		me:          me,
@@ -306,11 +306,12 @@ func Make(peers []*labrpc.ClientEnd, me int,
 		rand:        rand.New(rand.NewSource(time.Now().UnixNano())),
 	}
 	rf.initLog()
+	// load persisted data
 	if persist := persister.ReadRaftState(); len(persist) > 0 {
 		rf.ReadPersist(persist)
 	}
 
-	go ApplyTransfer(rf.me, rf.Log.applyCh, applyCh) // logEntry -> ApplyTransfer -> StateMachine
+	go ApplyTransfer(rf.me, rf.Log.applyCh, applyCh)
 	rf.initStateMachine(me, persister)
 
 	if rf.role == leader {
@@ -383,6 +384,7 @@ func (rf *Raft) shouldMakeSnapshot() bool {
 	return rf.maxRaftSize > 0 && rf.Log.EstimateSize() > rf.maxRaftSize
 }
 
+// <logEntry> -> [ApplyTransfer] -> [StateMachine]
 func ApplyTransfer(peerID int, from <-chan ApplyMsg, to chan<- ApplyMsg) {
 	var lastApplied int
 	q := queue.NewLinkedQueue()
